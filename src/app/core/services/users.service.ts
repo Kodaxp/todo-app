@@ -8,6 +8,13 @@ import axios from "axios";
 export class UsersService {
   private readonly endpoint = `http://localhost:3000/users`;
   private _isLogged = false;
+  private _loggedUser: UsersInterface = {
+    id: '',
+    email: '',
+    password: '',
+    lastname: '',
+    name: ''
+  };
 
   async getAllUsers(): Promise<UsersInterface[]> {
     return (await axios.get(this.endpoint)).data;
@@ -17,10 +24,19 @@ export class UsersService {
     const users = await this.getAllUsers();
     const findUser = users.find((user) => user.email === email);
     this.isLogged = findUser?.password === password;
+    if (findUser) this.loggedUser = findUser;
     return this.isLogged;
   }
 
-  get isLogged() {
+  get loggedUser(): UsersInterface {
+    return this._loggedUser;
+  }
+
+  set loggedUser(user: UsersInterface) {
+    this._loggedUser = user;
+  }
+
+  get isLogged(): boolean {
     return this._isLogged;
   }
 
