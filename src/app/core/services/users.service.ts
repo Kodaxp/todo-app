@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {UsersInterface} from "../models/users.interface";
-import axios from "axios";
+import { Injectable } from '@angular/core';
+import { UsersInterface } from '../models/users.interface';
+import axios from 'axios';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
   private readonly endpoint = `http://localhost:3000/users`;
@@ -13,7 +13,7 @@ export class UsersService {
     email: '',
     password: '',
     lastname: '',
-    name: ''
+    name: '',
   };
 
   async getAllUsers(): Promise<UsersInterface[]> {
