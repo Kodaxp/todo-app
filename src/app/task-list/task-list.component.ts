@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,12 +13,11 @@ import { SelectionModel } from '@angular/cdk/collections';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class TaskListComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   selection = new SelectionModel<TasksInterface>(true, []);
 
   displayedColumns: string[] = ['select', 'title', 'description', 'completed', 'actions'];
-
   dataSource!: MatTableDataSource<TasksInterface>;
   userNameToShow: string = this.usersService.loggedUserName;
   tasksList: TasksInterface[] = [];
@@ -29,7 +27,9 @@ export class TaskListComponent {
     private usersService: UsersService,
     private tasksService: TasksService,
     public dialog: MatDialog
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.setTableData().then(() => (this.showTable = true));
   }
 
@@ -37,15 +37,14 @@ export class TaskListComponent {
     this.tasksList = await this.tasksService.getTaskByUser(this.usersService.loggedUserId);
     this.selection.select(...this.tasksList.filter((a) => a.completed));
     this.dataSource = new MatTableDataSource(this.tasksList);
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   applyFilter(event: any) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   addNewTask() {
