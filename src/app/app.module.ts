@@ -4,13 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
-import { TaskListModule } from './task-list/list/task-list.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TaskListModule } from './task-list/task-list.module';
+import { TaskDialogModule } from './common/components/task-dialog/task-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, LoginModule, TaskListModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, LoginModule, TaskListModule, TaskDialogModule],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
