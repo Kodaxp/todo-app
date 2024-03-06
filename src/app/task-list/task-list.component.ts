@@ -16,30 +16,27 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class TaskListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   selection = new SelectionModel<TasksInterface>(true, []);
 
-  displayedColumns: string[] = ['select', 'title', 'description', 'completed'];
+  displayedColumns: string[] = ['select', 'title', 'description', 'completed', 'actions'];
 
   dataSource!: MatTableDataSource<TasksInterface>;
   userNameToShow: string = this.usersService.loggedUserName;
+  tasksList: TasksInterface[] = [];
+  showTable = false;
 
   constructor(
     private usersService: UsersService,
     private tasksService: TasksService,
     public dialog: MatDialog
   ) {
-    this.setTableData().then();
+    this.setTableData().then(() => (this.showTable = true));
   }
 
   async setTableData() {
-    const tasksList = await this.tasksService.getTaskByUser(this.usersService.loggedUserId);
-    tasksList.forEach((task) => {
-      if (task.completed) {
-        this.selection.select(task);
-      }
-    });
-    this.dataSource = new MatTableDataSource(tasksList);
+    this.tasksList = await this.tasksService.getTaskByUser(this.usersService.loggedUserId);
+    this.selection.select(...this.tasksList.filter((a) => a.completed));
+    this.dataSource = new MatTableDataSource(this.tasksList);
   }
 
   applyFilter(event: any) {
@@ -52,7 +49,22 @@ export class TaskListComponent {
   }
 
   addNewTask() {
-    this.dialog.open(TaskDialogComponent, { data: { user: this.usersService.loggedUserId, function: 'add' } });
+    const dialogRef = this.dialog.open(TaskDialogComponent, { data: { function: 'add' } });
+    dialogRef.afterClosed().subscribe(() => {
+      this.updateTaskList();
+    });
+  }
+
+  updateTask(task: TasksInterface) {
+    const dialogRef = this.dialog.open(TaskDialogComponent, { data: { task, function: 'edit' } });
+    dialogRef.afterClosed().subscribe(() => {
+      this.updateTaskList();
+    });
+  }
+
+  async deleteTask(id: string) {
+    await this.tasksService.deleteTask(id);
+    this.updateTaskList();
   }
 
   async toggleSelection(row: TasksInterface) {
@@ -61,28 +73,7 @@ export class TaskListComponent {
     row.completed = !row.completed;
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  async toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      this.dataSource.data.forEach((data) => (data.completed = false));
-      await this.tasksService.updateAllTask(this.dataSource.data);
-      return;
-    }
-    this.dataSource.data.forEach((data) => (data.completed = true));
-    await this.tasksService.updateAllTask(this.dataSource.data);
-    this.selection.select(...this.dataSource.data);
-  }
-
-  checkboxLabel(row?: TasksInterface): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  private updateTaskList() {
+    this.dataSource.data = this.tasksService.taskList;
   }
 }

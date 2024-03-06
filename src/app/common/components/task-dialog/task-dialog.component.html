@@ -1,9 +1,20 @@
 <div>
-  <label>Agregar tarea</label>
+  <label>{{ dialogTitle }} tarea</label>
 
   <mat-form-field>
     <mat-label>Titulo</mat-label>
     <input type="text" matInput [formControl]="titleFormControl" />
-    <mat-error *ngIf="titleFormControl.hasError('required')"> El email es <strong>requerido</strong> </mat-error>
+    <mat-error *ngIf="titleFormControl.hasError('required')"> El titulo es <strong>requerido</strong> </mat-error>
   </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Descripción</mat-label>
+    <textarea rows="10" matInput [formControl]="descriptionFormControl"></textarea>
+    <mat-error *ngIf="descriptionFormControl.hasError('required')"> La descripción es <strong>requerido</strong> </mat-error>
+  </mat-form-field>
+
+  <div class="buttons">
+    <button mat-flat-button (click)="close()">Cancelar</button>
+    <button mat-flat-button [disabled]="titleFormControl.invalid || descriptionFormControl.invalid" (click)="save()" color="primary">Guardar</button>
+  </div>
 </div>
