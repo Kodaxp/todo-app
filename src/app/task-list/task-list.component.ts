@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UsersService } from '../../core/services/users.service';
-import { TasksService } from '../../core/services/tasks.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { TasksInterface } from '../../core/models/tasks.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { TasksInterface } from '../core/models/tasks.interface';
+import { UsersService } from '../core/services/users.service';
+import { TasksService } from '../core/services/tasks.service';
+import { TaskDialogComponent } from '../common/components/task-dialog/task-dialog.component';
 
 @Component({
   selector: 'app-task-list',
@@ -22,7 +24,8 @@ export class TaskListComponent {
 
   constructor(
     private usersService: UsersService,
-    private tasksService: TasksService
+    private tasksService: TasksService,
+    public dialog: MatDialog
   ) {
     this.userNameToShow = this.usersService.loggedUser.name;
     this.setTableData().then(() => (this.showTable = true));
@@ -40,5 +43,9 @@ export class TaskListComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  addNewTask() {
+    this.dialog.open(TaskDialogComponent, { data: { user: this.usersService.loggedUser, function: 'add' } });
   }
 }

@@ -6,11 +6,10 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TaskListModule } from './task-list/task-list.module';
-import { TaskDialogModule } from './common/components/task-dialog/task-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, LoginModule, TaskListModule, TaskDialogModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, LoginModule, TaskListModule],
   providers: [],
   bootstrap: [AppComponent]
 })
