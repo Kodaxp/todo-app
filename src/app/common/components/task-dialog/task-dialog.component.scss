@@ -1,4 +1,22 @@
 div {
   display: flex;
   flex-direction: column;
+  width: 400px;
+  height: 500px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+
+  mat-form-field {
+    width: 80%;
+  }
 }

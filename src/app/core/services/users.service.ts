@@ -3,7 +3,7 @@ import { UsersInterface } from '../models/users.interface';
 import axios from 'axios';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UsersService {
   private readonly endpoint = `http://localhost:3000/users`;
@@ -13,7 +13,7 @@ export class UsersService {
     email: '',
     password: '',
     lastname: '',
-    name: '',
+    name: ''
   };
 
   async getAllUsers(): Promise<UsersInterface[]> {
@@ -28,19 +28,23 @@ export class UsersService {
     return this.isLogged;
   }
 
-  get loggedUser(): UsersInterface {
-    return this._loggedUser;
+  get loggedUserId(): string {
+    return this._loggedUser.id;
   }
 
-  set loggedUser(user: UsersInterface) {
-    this._loggedUser = user;
+  get loggedUserName(): string {
+    return this._loggedUser.name;
   }
 
   get isLogged(): boolean {
     return this._isLogged;
   }
 
-  set isLogged(verification: boolean) {
+  private set loggedUser(user: UsersInterface) {
+    this._loggedUser = user;
+  }
+
+  private set isLogged(verification: boolean) {
     this._isLogged = verification;
   }
 }
