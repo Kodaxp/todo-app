@@ -20,7 +20,6 @@ export class TaskListComponent implements OnInit {
   displayedColumns: string[] = ['select', 'title', 'description', 'completed', 'actions'];
   dataSource!: MatTableDataSource<TasksInterface>;
   userNameToShow: string = this.usersService.loggedUserName;
-  tasksList: TasksInterface[] = [];
   showTable = false;
 
   constructor(
@@ -34,12 +33,8 @@ export class TaskListComponent implements OnInit {
   }
 
   async setTableData() {
-    this.tasksList = await this.tasksService.getTaskByUser(this.usersService.loggedUserId);
-    this.selection.select(...this.tasksList.filter((a) => a.completed));
-    this.dataSource = new MatTableDataSource(this.tasksList);
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-    });
+    await this.tasksService.getTaskByUser(this.usersService.loggedUserId);
+    this.updateTaskList();
   }
 
   applyFilter(event: any) {
@@ -73,6 +68,10 @@ export class TaskListComponent implements OnInit {
   }
 
   private updateTaskList() {
-    this.dataSource.data = this.tasksService.taskList;
+    this.selection.select(...this.tasksService.taskList.filter((a) => a.completed));
+    this.dataSource = new MatTableDataSource(this.tasksService.taskList);
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+    });
   }
 }

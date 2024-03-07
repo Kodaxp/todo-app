@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UsersInterface } from '../../../core/models/users.interface';
 import { FormControl, Validators } from '@angular/forms';
 import { TasksService } from '../../../core/services/tasks.service';
 import { TasksInterface } from '../../../core/models/tasks.interface';
@@ -14,13 +13,14 @@ export class TaskDialogComponent {
   titleFormControl: FormControl = new FormControl('', [Validators.required]);
   descriptionFormControl: FormControl = new FormControl('', [Validators.required]);
 
-  dialogTitle = this.data.function === 'add' ? 'Agregar' : 'Editar';
+  dialogTitle: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { task: TasksInterface; function: string },
     public dialogRef: MatDialogRef<TaskDialogComponent>,
     private tasksService: TasksService
   ) {
+    this.dialogTitle = this.data.function === 'add' ? 'Agregar' : 'Editar';
     if (this.data.function === 'edit') {
       this.titleFormControl.setValue(this.data.task.title);
       this.descriptionFormControl.setValue(this.data.task.description);

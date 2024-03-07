@@ -10,10 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [],
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -27,6 +29,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatCheckboxModule
   ],
   exports: [
+    BrowserAnimationsModule,
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,

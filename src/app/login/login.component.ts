@@ -9,8 +9,8 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  passwordFormControl = new FormControl('', [Validators.required]);
+  emailFormControl: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  passwordFormControl: FormControl = new FormControl('', [Validators.required]);
 
   constructor(
     private usersService: UsersService,
@@ -18,8 +18,9 @@ export class LoginComponent {
   ) {}
 
   async login() {
-    const validate = await this.usersService.validateUser('juan@email.com', '123456');
+    if (this.emailFormControl.invalid || this.passwordFormControl.invalid) return;
 
+    const validate = await this.usersService.validateUser(this.emailFormControl.value, this.passwordFormControl.value);
     if (validate) {
       await this.router.navigate(['/list']);
     }

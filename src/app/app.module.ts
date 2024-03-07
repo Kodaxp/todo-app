@@ -9,7 +9,7 @@ import { TaskListModule } from './task-list/task-list.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, LoginModule, TaskListModule],
+  imports: [BrowserModule, AppRoutingModule, LoginModule, TaskListModule],
   providers: [],
   bootstrap: [AppComponent]
 })
